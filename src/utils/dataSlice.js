@@ -4,7 +4,8 @@ const dataSlice=createSlice(
     {
   name:"DataSlice",
   initialState:{
-    item:null
+    item:null,
+    List:[]
   },
   reducers:{
 addData:(state,action)=>{
