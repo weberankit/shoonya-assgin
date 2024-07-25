@@ -3,8 +3,10 @@ import { addData } from "../utils/dataSlice"
 //import useDataFetch from "../customHooks/useDataFetch"
 import useDataFetch from "../customHooks/useDataFetch"
 import Cards from "./Cards"
+import { useSelector } from "react-redux"
 const RetreatContainer=()=>{
 const [pageNo,setPageNo] =useState(1)
+const selectData=useSelector((store)=>store.dataslice?.item)
 
 //I could use frontend aprroach but that is not optimal method
 //so i am using backend Aprroach
@@ -35,8 +37,8 @@ function handlePrevious(){
     return(
         <>
         <Cards/>
-        <button onClick={()=>handlePrevious()}>Previous</button>
-        <button onClick={()=>handleNext()}>Next</button>
+    { selectData?.length>0 &&  <button onClick={()=>handlePrevious()}>Previous</button>}
+    { selectData?.length>0 &&  <button onClick={()=>handleNext()}>Next</button>}
         
         </>
     )

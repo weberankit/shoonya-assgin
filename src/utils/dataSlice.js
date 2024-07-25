@@ -5,13 +5,21 @@ const dataSlice=createSlice(
   name:"DataSlice",
   initialState:{
     item:null,
-    List:[]
+    List:null,
+    subList:null
   },
   reducers:{
 addData:(state,action)=>{
   state.item=action.payload
-}
+},
 
+addFilterData:(state,action)=>{
+  state.List=action.payload
+},
+
+addSubFilterData:(state,action)=>{
+  state.subList=action.payload
+},
   }
 
 
@@ -19,4 +27,4 @@ addData:(state,action)=>{
 )
 
 export default dataSlice.reducer
-export const {addData} = dataSlice.actions
+export const {addData,addFilterData,addSubFilterData} = dataSlice.actions
