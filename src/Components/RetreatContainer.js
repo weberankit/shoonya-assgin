@@ -7,39 +7,60 @@ import { useSelector } from "react-redux"
 const RetreatContainer=()=>{
 const [pageNo,setPageNo] =useState(1)
 const selectData=useSelector((store)=>store.dataslice?.item)
-
+const [message,setMessage] =useState("")
+const [hideBtns,setHideBtns]=useState({firstBtn:null,SecondBtn:null})
 //I could use frontend aprroach but that is not optimal method
 //so i am using backend Aprroach
 
-let totalPage=20/2   // 2--limit , 20-total data after fetching as api is not providing api.total
+let totalPage=Math.floor( 21/3)   // 3--limit , 21-total data after fetching as api is not providing api.total()
 
-console.log(Math.random(),"2")
+console.log(Math.random(),"2",totalPage,pageNo)
 
 
-useDataFetch(pageNo)
+useDataFetch(pageNo,setMessage)
 
 function handleNext(){
   if(pageNo>=totalPage){
-    return alert("you have exceed")
+    
+    return 
   }
 
     setPageNo(pageNo+1)
 }
 function handlePrevious(){
     if(pageNo<=1){
-        return alert("you have prcedded")
+     
+        return 
       }
 
     setPageNo(pageNo-1)
 }
-//https://669f704cb132e2c136fdd9a0.mockapi.io/api/v1/retreats?page=1&limit=5
+
+
+
+
+
+useEffect(()=>{
+
+pageNo==1? setHideBtns((prev)=>{return{...prev,SecondBtn:"hidden"}}):setHideBtns((prev)=>{return{...prev,SecondBtn:"null"}})
+
+pageNo == totalPage ? setHideBtns((prev)=>{return{...prev,firstBtn:"hidden"}}):setHideBtns((prev)=>{return{...prev,firstBtn:"null"}})
+},[pageNo])
 
     return(
         <>
+   <div className="relative  flex justify-center">
+  {message && (
+    <div className="absolute top-10 w-64 bg-gray-950 text-white font-bold p-2 text-center py-1 rounded-md px-10 animate-pulse">
+      {message}
+    </div>
+  )}
+</div>
         <Cards/>
-    { selectData?.length>0 &&  <button onClick={()=>handlePrevious()}>Previous</button>}
-    { selectData?.length>0 &&  <button onClick={()=>handleNext()}>Next</button>}
-        
+        <div className="text-center">
+    { selectData?.length>0 &&  <button className={`${hideBtns?.SecondBtn} px-3 py-2 bg-[#1b3252] text-white rounded-lg m-1 hover:bg-black`} onClick={()=>handlePrevious()}>Previous</button>}
+    { selectData?.length>0 &&  <button  className={`${hideBtns?.firstBtn  } px-3 py-2 bg-[#1b3252] text-white rounded-lg m-1 hover:bg-black`}  onClick={()=>handleNext()}>Next</button>}
+        </div>
         </>
     )
 }
