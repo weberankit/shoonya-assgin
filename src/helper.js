@@ -34,8 +34,8 @@
 
 
 
-   export  const Ai=(question,data,setresAi,setIndi,datas)=>{
-        
+   export  const Ai=(question,userVal,setIndi,data,dispatch,addFilterData,addData)=>{
+    const apiKey=process.env.REACT_APP_AI_KEY;
         const genAI = new GoogleGenerativeAI(apiKey);
       async  function apiCall(){
             try{
@@ -44,18 +44,22 @@
                 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
               
                 const prompt = `
-              ${question} ${data}
+              ${question} ${userVal}
                   `
-              //console.log(prompt ,"prompt")
+             // console.log(prompt ,"prompt")
                 const result = await model.generateContent(prompt);
                 const response = await result.response;
                 const text = response.text();
-                console.log(text)
-               setresAi(()=>{
-                datas.current.value=""
-                return text})
-               setIndi(null)
-            //   console.log(data,"ff")
+               // console.log(text)
+              const getCategoryFromAi = await category(text)
+             // console.log(getCategoryFromAi,"processing")
+              if(getCategoryFromAi && text){
+                   setIndi(null)
+                   data.current.value=""
+                handleFilterAll(getCategoryFromAi,dispatch,addFilterData,setIndi,'search',addData)
+
+              }
+            
               }catch(error){
                setIndi("sorry something wrong in Ai fetching ")
               }
@@ -63,6 +67,22 @@
     
     apiCall()
     }
+
+async function  category (getRes){
+  const categoryMatch = getRes.match(/\*\*(.*)\*\*/);
+
+if (categoryMatch) {
+  const categoryItem = categoryMatch[1];
+ // console.log(categoryItem); 
+return categoryItem
+
+
+} else {
+  console.log("Category not found");
+}
+}
+
+
 
 
 
