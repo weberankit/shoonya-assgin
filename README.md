@@ -1,3 +1,4 @@
+check all info is provided project Config,live website,live link, project setup
 ```Project configuration :
 /project-root
 |-- /public
